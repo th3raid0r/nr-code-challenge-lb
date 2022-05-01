@@ -35,9 +35,13 @@ From here, we will develop our GO application to perform the same function. This
 
 The code examples herin falls under no license and may be duplicated without attribution to me.
 
+
+
 However our language of choice and runtime selection fall under different licenses:
 
 Docker - [License](https://github.com/moby/moby/blob/master/LICENSE)
+
 Docker Desktop - [License](https://docs.docker.com/subscription/#docker-desktop-license-agreement)
+
 Golang - [License](https://go.dev/LICENSE)
 
