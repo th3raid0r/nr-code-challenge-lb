@@ -19,3 +19,8 @@
 
 # Go workspace file
 go.work
+
+# Docker env files
+*.env
+.env
+
