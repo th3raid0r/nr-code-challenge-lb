@@ -4,17 +4,17 @@ This repository contains my code challenge submission for my New Relic SRE Appli
 
 ## Milestones
 
-[X] Reference Proxy - Traefik (Go)
-[X] Simple Fizz and Buzz containers
-[X] Functional docker compose file for reference
-[ ] Initial Golang files for Demo
-[ ] Accept an http GET
-[ ] Forward GET to backend
-[ ] Add second backend and enable round robin
-[ ] Add test framework
-[ ] Add tests (Accept a GET request, Forward GET Request, Round Robin)
-[ ] Refactor and add relevant parameters
-[ ] Update Readme.md
+- [X] Reference Proxy - Traefik (Go)
+- [X] Simple Fizz and Buzz containers
+- [X] Functional docker compose file for reference
+- [ ] Initial Golang files for Demo
+- [ ] Accept an http GET
+- [ ] Forward GET to backend
+- [ ] Add second backend and enable round robin
+- [ ] Add test framework
+- [ ] Add tests (Accept a GET request, Forward GET Request, Round Robin)
+- [ ] Refactor and add relevant parameters
+- [ ] Update Readme.md
 
 
 ## Pre-requisites:
