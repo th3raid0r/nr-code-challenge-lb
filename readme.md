@@ -59,7 +59,7 @@ PORT=3030
 8. Additionally, you can modify `docker-compose.yml` to include another copy of the "echo" instances (fizz and buzz). Just be sure to add the new host to your app.env file!
 
 
-* - Note - A default docker desktop configuration will likely bind these domains for you based on our compose file, but it's here if you're configuration is more custom.
+* \*Note - A default docker desktop configuration will likely bind these domains for you based on our compose file, but it's here if you're configuration is more custom.
 
 ## Next Steps:
 
