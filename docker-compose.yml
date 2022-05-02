@@ -75,8 +75,8 @@ services:
       - source: demo_config
         target: /root/app.env
     environment:
-      - "LB_PORT=$PORT"
-      - "LB_TARGET_LIST=$TARGET_LIST"
+      - "LB_PORT=${PORT}"
+      - "LB_TARGET_LIST=${TARGET_LIST}"
     ports:
       - "3030:${PORT}"
     networks:
