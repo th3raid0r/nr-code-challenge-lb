@@ -11,8 +11,8 @@ This repository contains my code challenge submission for my New Relic SRE Appli
 - [X] Accept an http GET
 - [X] Forward GET to backend
 - [X] Add second backend and enable round robin
-- [ ] Add test framework
-- [ ] Add tests (Accept a GET request, Forward GET Request, Round Robin)
+- [X] ~~Add test framework~~ Golang includes a test framework
+- [ ] Add tests (Accept a GET request, Forward GET Request, Round Robin - Attempted)
 - [ ] Refactor and add relevant parameters
 - [ ] Update Readme.md
 
