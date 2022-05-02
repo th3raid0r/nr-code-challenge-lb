@@ -50,17 +50,27 @@ TARGET_LIST=http://fizz:80,http://buzz:80
 PORT=3030
 ```        
 4. Run the docker compose template with the env file. `docker-compose --env-file ./app.env up -d`
-5. Create the follwoing [HOSTS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/) file entries:
+5. Create the follwoing [HOSTS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/) file entries*:
 ```
 127.0.0.1 localhost local example.local fizz.example.local buzz.example.local referencelb.example.local demo.example.local
 ```
-Note! - A default docker desktop configuration will likely bind these domains for you based on our compose file, but it's here if you're configuration is more custom.
+6. Navigate to `http://demo.example.local:3030` and observe the "OS: Host" field chance between fizz and buzz between each refresh.
+7. If you wish, compare with the traefik reference loadbalancer.
+8. Additionally, you can modify `docker-compose.yml` to include another copy of the "echo" instances (fizz and buzz). Just be sure to add the new host to your app.env file!
+
+
+* \*Note - A default docker desktop configuration will likely bind these domains for you based on our compose file, but it's here if you're configuration is more custom.
+
+## Next Steps:
+
+From here we need test coverage mostly. 
 
 ## Attributions
 
 I've cobbled this together from resources found here: 
 
 [Simplelb](https://github.com/kasvith/simplelb)
+
 [Viper](https://github.com/spf13/viper)
 
 ## Licenses
@@ -75,4 +85,8 @@ Docker - [License](https://github.com/moby/moby/blob/master/LICENSE)
 Docker Desktop - [License](https://docs.docker.com/subscription/#docker-desktop-license-agreement)
 
 Golang - [License](https://go.dev/LICENSE)
+
+Traefik - [License](https://github.com/traefik/traefik/blob/master/LICENSE.md)
+
+http-https-echo - [License](https://github.com/mendhak/docker-http-https-echo/blob/master/LICENSE.md)
 
