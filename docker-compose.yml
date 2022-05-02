@@ -71,15 +71,21 @@ services:
     restart: unless-stopped
     env_file: 
       - ./app.env
+    configs:
+      - source: demo_config
+        target: /root/app.env
     environment:
-      - "TARGET_LIST=$TARGET_LIST"
-      - "PORT=$PORT"
+      - "LB_PORT=$PORT"
+      - "LB_TARGET_LIST=$TARGET_LIST"
     ports:
       - "3030:${PORT}"
     networks:
-      - private
       - public
+      - private
 
+configs:
+  demo_config:
+    file: ./app.env
 
 networks:
   public:
