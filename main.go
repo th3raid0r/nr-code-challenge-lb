@@ -44,31 +44,46 @@ func (u *Upstream) SetAlive(alive bool) {
 	//Use mux lock to avoid race conditions. Let's just hope we don't need to write a ton.
 	u.mux.Lock()
 	u.Alive = alive
-	b.mux.Unlock()
+	u.mux.Unlock()
 }
 
 func (u *Upstream) IsAlive() (alive bool) {
 	u.mux.RLock()
 	alive = u.Alive
-	b.mux.RUnlock()
+	u.mux.RUnlock()
 	return
+}
+
+// AddUpstream to the server pool
+func (t *Targets) AddUpstream(upstream *Upstream) {
+	t.upstreams = append(t.upstreams, upstream)
+}
+
+// MarkUpstreamStatus changes a status of a backend
+func (t *Targets) MarkUpstreamStatus(upstreamUrl *url.URL, alive bool) {
+	for _, u := range t.upstreams {
+		if u.URL.String() == upstreamUrl.String() {
+			u.SetAlive(alive)
+			break
+		}
+	}
 }
 
 // Return next active upstream
 func (t *Targets) GetNextUpstream() *Upstream {
 	// standard loop over targets to find an active one.
-	next := t.NextIndex
+	next := t.NextIndex()
 	l := len(t.upstreams) + next
 	for i := next; i < l; i++ {
 		idx := i % len(t.upstreams)
-		if s.backends[idx].IsAlive() {
+		if t.upstreams[idx].IsAlive() {
 			if i != next {
 				atomic.StoreUint64(&t.current, uint64(idx))
 			}
 			return t.upstreams[idx]
 		}
 	}
-	return nill
+	return nil
 
 }
 
@@ -83,15 +98,15 @@ func isUpstreamAlive(u *url.URL) bool {
 	return true
 }
 
-func (s *ServerPool) HealthCheck() {
-	for _, b := range s.backends {
+func (t *Targets) HealthCheck() {
+	for _, u := range t.upstreams {
 		status := "up"
-		alive := isUpstreamAlive(b.URL)
-		b.SetAlive(alive)
+		alive := isUpstreamAlive(u.URL)
+		u.SetAlive(alive)
 		if !alive {
 			status = "down"
 		}
-		log.Printf("%s [%s]\n", b.URL, status)
+		log.Printf("%s [%s]\n", u.URL, status)
 	}
 }
 
@@ -101,7 +116,7 @@ func healthCheck() {
 		select {
 		case <-t.C:
 			log.Println("Starting health check...")
-			serverPool.HealthCheck()
+			targets.HealthCheck()
 			log.Println("Health check completed")
 		}
 	}
@@ -131,7 +146,7 @@ func lb(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	upstream := Targets.GetNextUpstream()
+	upstream := targets.GetNextUpstream()
 	if upstream != nil {
 		upstream.ReverseProxy.ServeHTTP(w, r)
 		return
@@ -139,23 +154,25 @@ func lb(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Service not available", http.StatusServiceUnavailable)
 }
 
+var targets Targets
+
 func main() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
 		log.Fatal("cannot load config:", err)
 	}
 
-	var targets string = config.TargetList
+	var targetList string = config.TargetList
 	var port int = config.Port
 
-	if len(targets) == 0 {
+	if len(targetList) == 0 {
 		log.Fatal("Please provide one or more upstream servers to the load balancer")
 	}
 
-	tokens := strings.Split(targets, ",")
+	tokens := strings.Split(targetList, ",")
 	for _, tok := range tokens {
 		serverUrl, err := url.Parse(tok)
-		if err != nill {
+		if err != nil {
 			log.Fatal(err)
 		}
 
@@ -173,7 +190,7 @@ func main() {
 			}
 
 			// after 3 retries, mark this backend as down
-			serverPool.MarkBackendStatus(serverUrl, false)
+			targets.MarkUpstreamStatus(serverUrl, false)
 
 			// if the same request routing for few attempts with different backends, increase the count
 			attempts := GetAttemptsFromContext(request)
@@ -182,7 +199,7 @@ func main() {
 			lb(writer, request.WithContext(ctx))
 		}
 
-		serverPool.AddBackend(&Upstream{
+		targets.AddUpstream(&Upstream{
 			URL:          serverUrl,
 			Alive:        true,
 			ReverseProxy: proxy,
