@@ -16,6 +16,17 @@ This repository contains my code challenge submission for my New Relic SRE Appli
 - [ ] Refactor and add relevant parameters
 - [ ] Update Readme.md
 
+### Requirements:
+
+- [X] Application distributes request between 2 or more backend services.
+- [X] Application performs round-robin distribution
+
+#### Extras:
+
+- [X] Dynamic
+- [X] Healthchecks (dynamic and passive)
+- [ ] Sorry Page
+- [X] Portable (Go)
 
 ## Pre-requisites:
 
@@ -27,14 +38,34 @@ The following components are required to build and run the solution.
 
 ## How to Use:
 
-Run the provided docker-compose file. It currently provides a reference load balancer with two identical backends to provide a functional example of what the solution should look like. 
+Install the dependencies above (for personal use, I recommend Docker Desktop).
 
-From here, we will develop our GO application to perform the same function. This will immediately be wrapped in a `Dockerfile` and added as a new service in `docker-compose.yml`, likely before it is fully functional. 
+Then open up a terminal and:
+
+1. Clone this repository. `git clone https://github.com/th3raid0r/nr-code-challenge-lb.git`
+2. Cd into the directory. `cd nr-code-challenge-lb`
+3. Create a file named `app.env` and fill it with the following information:
+``` 
+TARGET_LIST=http://fizz:80,http://buzz:80
+PORT=3030
+```        
+4. Run the docker compose template with the env file. `docker-compose --env-file ./app.env up -d`
+5. Create the follwoing [HOSTS](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/) file entries:
+```
+127.0.0.1 localhost local example.local fizz.example.local buzz.example.local referencelb.example.local demo.example.local
+```
+Note! - A default docker desktop configuration will likely bind these domains for you based on our compose file, but it's here if you're configuration is more custom.
+
+## Attributions
+
+I've cobbled this together from resources found here: 
+
+[Simplelb](https://github.com/kasvith/simplelb)
+[Viper](https://github.com/spf13/viper)
 
 ## Licenses
 
 The code examples herin falls under no license and may be duplicated without attribution to me.
-
 
 
 However our language of choice and runtime selection fall under different licenses:
