@@ -70,6 +70,7 @@ From here we need test coverage mostly.
 I've cobbled this together from resources found here: 
 
 [Simplelb](https://github.com/kasvith/simplelb)
+
 [Viper](https://github.com/spf13/viper)
 
 ## Licenses
@@ -84,4 +85,8 @@ Docker - [License](https://github.com/moby/moby/blob/master/LICENSE)
 Docker Desktop - [License](https://docs.docker.com/subscription/#docker-desktop-license-agreement)
 
 Golang - [License](https://go.dev/LICENSE)
+
+Traefik - [License](https://github.com/traefik/traefik/blob/master/LICENSE.md)
+
+http-https-echo - [License](https://github.com/mendhak/docker-http-https-echo/blob/master/LICENSE.md)
 
